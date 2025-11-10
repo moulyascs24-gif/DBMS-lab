@@ -64,3 +64,44 @@ INSERT INTO assigned_to VALUES(7521,101,'Software Architect');
 INSERT INTO assigned_to VALUES(7566,101,'Project Manager');
 INSERT INTO assigned_to VALUES(7654,102,'Sales');
 select*from assigned_to;
+
+SELECT m.ename, count(*)
+FROM emp e,emp m
+WHERE e.mgr_no = m.empno
+GROUP BY m.ename
+HAVING count(*) =(SELECT MAX(mycount)
+from (SELECT COUNT(*) mycount FROM emp GROUP BY mgr_no) a);
+
+
+SELECT * FROM emp m WHERE m.empno IN(SELECT mgr_no FROM emp)AND m.sal &gt;
+(SELECT avg(e.sal)
+FROM emp e
+WHERE e.mgr_no = m.empno );
+
+select *
+from emp e,incentives i
+where e.empno=i.empno and 2 = ( select count(*)
+
+from incentives j
+where i.incentive_amount = j.incentive_amount );
+
+select e.empno
+from emp e, assigned_to a, project p
+where e.empno=a.empno and a.pno=p.pno and
+p.ploc in ('Bengaluru','Hyderabad','Mysuru');
+
+SELECT *
+FROM EMP E
+WHERE E.DEPTNO = (SELECT E1.DEPTNO
+
+FROM EMP E1
+
+WHERE E1.EMPNO=E.MGR_NO);
+
+SELECT distinct e.ename,
+FROM emp e,incentives 
+WHERE (SELECT max(sal+incentive_amount)
+FROM emp,incentives) = ANY;
+(SELECT sal
+FROM emp e1
+where e.deptno=e1.deptno);
